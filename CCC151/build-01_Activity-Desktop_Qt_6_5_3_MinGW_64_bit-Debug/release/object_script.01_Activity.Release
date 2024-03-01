@@ -1,0 +1,10 @@
+release/addbutton.o
+release/configcourse.o
+release/courseconfig.o
+release/main.o
+release/mainwindow.o
+release/qrc_Data.o
+release/moc_addbutton.o
+release/moc_configcourse.o
+release/moc_courseconfig.o
+release/moc_mainwindow.o

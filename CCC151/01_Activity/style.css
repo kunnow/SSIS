@@ -1,0 +1,20 @@
+#idnumber {
+    border: 1px solid black; /* Add your border style */
+    border-radius: 5px; /* Add your border-radius */
+    padding: 5px; /* Add your padding */
+}
+
+#idnumberPlaceholder {
+    color: gray; /* Set the placeholder color */
+    font-size: 14px; /* Set the initial font size */
+    position: absolute;
+    top: 50%; /* Adjust the initial vertical position */
+    transform: translateY(-50%); /* Center the placeholder vertically */
+    transition: top 0.3s, font-size 0.3s; /* Add smooth transitions */
+}
+
+#idnumber:focus + #idnumberPlaceholder,
+#idnumber:not(:placeholder-shown) + #idnumberPlaceholder {
+    top: 10%; /* Adjust the final vertical position */
+    font-size: 10px; /* Set the final font size */
+}

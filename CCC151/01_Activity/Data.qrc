@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/CSVFiles">
+        <file>01-InfoCourses.csv</file>
+        <file>01-InfoStudents.csv</file>
+        <file>styles.css</file>
+        <file>../../keilah/bg.jpg</file>
+        <file>../../keilah/bgbgbg.jpg</file>
+        <file>../../keilah/bgpf.png</file>
+        <file>../../keilah/ccs-4x5 (1).jpg</file>
+        <file>../../keilah/pfbc.png</file>
+        <file>../../keilah/pfbg1.png</file>
+        <file>../../keilah/pfbg2.png</file>
+        <file>../../keilah/profieladd.png</file>
+        <file>../../keilah/profilebg.png</file>
+        <file>../../keilah/profiletb.png</file>
+        <file>../../keilah/tbprofile.png</file>
+        <file>../../keilah/Untitled-1.jpg</file>
+        <file>../../keilah/Untitled-3.png</file>
+        <file>../../keilah/Untitled-4.png</file>
+    </qresource>
+</RCC>

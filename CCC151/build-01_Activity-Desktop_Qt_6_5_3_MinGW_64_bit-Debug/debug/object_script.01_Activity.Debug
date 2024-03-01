@@ -1,0 +1,10 @@
+debug/addbutton.o
+debug/configcourse.o
+debug/courseconfig.o
+debug/main.o
+debug/mainwindow.o
+debug/qrc_Data.o
+debug/moc_addbutton.o
+debug/moc_configcourse.o
+debug/moc_courseconfig.o
+debug/moc_mainwindow.o
