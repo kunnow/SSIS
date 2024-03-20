@@ -50,6 +50,14 @@ void AddButton::on_pushButton_clicked()
     QString year = QString::number(ui->yearlevel->value());
     QString Cou = ui->course->text().trimmed();
 
+    static const QRegularExpression idRegex("^\\d{4}-\\d{4}$");
+
+    if (!idRegex.match(ID).hasMatch())
+    {
+        QMessageBox::critical(this, "ID Format Error", "Please enter the correct ID number format");
+        return;
+    }
+
     const QString studentsFilePath = "C:\\Users\\Shir Keilah\\Documents\\SSIS\\CCC151\\01_Activity\\01-InfoStudents.csv";
     const QString coursesFilePath = "C:\\Users\\Shir Keilah\\Documents\\SSIS\\CCC151\\01_Activity\\01-InfoCourses.csv";
 
@@ -89,12 +97,24 @@ void AddButton::on_pushButton_clicked()
     QTextStream in(&studentsFile);
     QStringList csvData;
 
+    bool idExists = false;
+
     while (!in.atEnd()) {
         QString line = in.readLine();
+        QStringList parts = line.split(',');
+        if (parts.size() >= 4 && parts[3].trimmed() == ID) {
+            QMessageBox::critical(this, "ID already exists", "The specified ID number already exists.");
+            studentsFile.close();
+            return;
+        }
         csvData.append(line);
     }
 
     studentsFile.close();
+
+    if (idExists) {
+        return;
+    }
 
     QString newData = Las + "," + Fir + "," + Mid + "," + ID + "," + Gen + "," + year + "," + Cou;
     csvData.append(newData);
@@ -117,4 +137,5 @@ void AddButton::on_pushButton_clicked()
     }
 
     QMessageBox::information(this, "Data Added", "Data added to the CSV file.");
+    studentsFile.close();
 }

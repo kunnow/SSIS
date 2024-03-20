@@ -135,7 +135,8 @@ void MainWindow::on_SearchButton_clicked()
         {
             QString lastName = model->data(model->index(match.row(), 0), Qt::DisplayRole).toString();
             QString firstName = model->data(model->index(match.row(), 1), Qt::DisplayRole).toString();
-            QString fullName = lastName + ", " + firstName;
+            QString idNumber = model->data(model->index(match.row(), 3), Qt::DisplayRole).toString();
+            QString fullName = lastName + ", " + firstName + "     " + idNumber;
             QStandardItem* item = new QStandardItem(fullName);
             listModel->appendRow(item);
         }
@@ -240,6 +241,14 @@ void MainWindow::on_SaveButton_clicked()
         QString year = QString::number(yearlevelSpinBox->value());
         QString Cou = courseLineEdit->text();
 
+        static const QRegularExpression idRegex("^\\d{4}-\\d{4}$");
+
+        if (!idRegex.match(ID).hasMatch())
+        {
+            QMessageBox::critical(this, "ID Format Error", "Please enter the correct ID number format");
+            return;
+        }
+
         const QString coursesFilePath = "C:\\Users\\Shir Keilah\\Documents\\SSIS\\CCC151\\01_Activity\\01-InfoCourses.csv";
 
         QFile coursesFile(coursesFilePath);
@@ -283,6 +292,15 @@ void MainWindow::on_SaveButton_clicked()
                 csvData.append(line);
             }
             studentsFile.close();
+
+            for (int i = 0; i < csvData.size(); ++i) {
+                QStringList parts = csvData[i].split(',');
+                if (i != selectedIndex.row() && parts.size() >= 4 && parts[3].trimmed() == ID) {
+                    QMessageBox::critical(this, "ID already exists", "The specified ID number already exists.");
+                    studentsFile.close();
+                    return;
+                }
+            }
 
             QString updatedData = Las + "," + Fir + "," + Mid + "," + ID + "," + Gen + "," + year + "," + Cou;
             csvData[selectedIndex.row()] = updatedData;
@@ -434,6 +452,31 @@ void MainWindow::on_addCourseButton_clicked()
         return;
     }
 
+    QFile coursesFile("C:\\Users\\Shir Keilah\\Documents\\SSIS\\CCC151\\01_Activity\\01-InfoCourses.csv");
+    if (coursesFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&coursesFile);
+
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList parts = line.split(',');
+
+            if (parts.size() >= 2) {
+                QString courseCode1 = parts[0].trimmed();
+                QString courseCode2 = parts[1].trimmed();
+
+                if (courseCode1 == newCourseCode1 && courseCode2 == newCourseCode2) {
+                    QMessageBox::warning(this, "Error", "Course already exists.");
+                    coursesFile.close();
+                    return;
+                }
+            }
+        }
+        coursesFile.close();
+    } else {
+        QMessageBox::critical(this, "Error", "Unable to open the courses CSV file for reading.");
+        return;
+    }
+
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Add Course", "Do you want to add this course?",
                                   QMessageBox::Yes | QMessageBox::No);
@@ -442,7 +485,6 @@ void MainWindow::on_addCourseButton_clicked()
         return;
     }
 
-    QFile coursesFile("C:\\Users\\Shir Keilah\\Documents\\SSIS\\CCC151\\01_Activity\\01-InfoCourses.csv");
     if (!coursesFile.open(QIODevice::Append | QIODevice::Text)) {
         QMessageBox::critical(this, "Error", "Unable to open the courses CSV file for writing.");
         return;
